@@ -4,9 +4,27 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Home</title>
+		<style>
+			html,
+			body {
+				overflow-x: hidden;
+				background-color: #0f0f1f;
+			}
+		</style>
 	</head>
 	<body>
-		<canvas id="canvas" width="800" height="600" style="border: 1px solid black"></canvas>
+		<canvas id="canvas" width="800" height="600"></canvas>
+		<div id="settings">
+			<p>
+				Click to shoot a <span id="clickColor" style="color: green">GREEN</span>
+				<span id="clickShape">STAR</span> firework!
+			</p>
+			<p>Click any word in all caps to change settings!</p>
+			<div style="display: flex; flex-direction: row; justify-content: space-between">
+				<p>GRAVITY</p>
+				<p>WIND</p>
+			</div>
+		</div>
 		<script src="./main.js"></script>
 	</body>
 </html>

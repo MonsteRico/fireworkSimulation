@@ -10,6 +10,7 @@ export default class Particle {
 	color: string;
 	rocket: boolean;
 	lifespan: number;
+	previousPostitions: { x: number; y: number }[] = [];
 	constructor(x: number, y: number, color: string, rocket?: boolean) {
 		this.x = x;
 		this.y = y;
@@ -36,7 +37,7 @@ export default class Particle {
 		if (!this.rocket) {
 			this.vy *= 0.95;
 			this.vx *= 0.95;
-			this.lifespan -= 2;
+			this.lifespan -= 3;
 		}
 		if (this.lifespan < 0) {
 			this.lifespan = 0;
@@ -47,10 +48,26 @@ export default class Particle {
 		this.y += this.vy;
 		this.ax = 0;
 		this.ay = 0;
+		this.previousPostitions.push({ x: this.x, y: this.y });
+		if (this.previousPostitions.length > 6) {
+			this.previousPostitions.shift();
+		}
 	};
 
 	draw = function (ctx: CanvasRenderingContext2D): void {
-		ctx.globalAlpha = this.lifespan / 255;
+		ctx.shadowColor = this.color;
+		ctx.shadowBlur = this.size * 1.5;
+		ctx.shadowOffsetX = 0;
+		ctx.shadowOffsetY = 0;
+		for (let i = 0; i < this.previousPostitions.length; i++) {
+			ctx.globalAlpha = ((i / this.previousPostitions.length) * this.lifespan) / 255;
+			let p = this.previousPostitions[i];
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.arc(p.x, p.y, this.size, 0, Math.PI * 2, false);
+			ctx.fill();
+			ctx.closePath();
+		}
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
 		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);

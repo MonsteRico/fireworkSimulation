@@ -1,4 +1,4 @@
 -   more firework shpaes
--   trails
+-   -   star, sparkle, fountain, smiley face
 -   able to change firework shape and color on click
 -   able to mess with the settings
