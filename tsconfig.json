@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist",
+		"lib": ["ESNext", "dom"],
+		"esModuleInterop": true,
+		"pretty": true,
+		"allowUnreachableCode": false,
+		"module": "es6",
+		"target": "es5",
+		"resolveJsonModule": true,
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "./dist/**/*"]
+}

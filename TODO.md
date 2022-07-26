@@ -1,0 +1,4 @@
+-   more firework shpaes
+-   trails
+-   able to change firework shape and color on click
+-   able to mess with the settings
