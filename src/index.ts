@@ -21,7 +21,7 @@ import Firework from "./firework";
 import { ExplosionType } from "./types";
 import { random } from "./utils";
 let fireworks: Firework[] = [];
-let skyColor;
+let skyColor: string;
 function setup() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -112,7 +112,7 @@ function render(): void {
 
 setup();
 
-function getMousePosition(canvas, event) {
+function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
 	let rect = canvas.getBoundingClientRect();
 	let x = event.clientX - rect.left;
 	let y = event.clientY - rect.top;
