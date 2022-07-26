@@ -26,4 +26,4 @@ export function randomVectorOnHeart(size: number): { x: number; y: number } {
 }
 
 export const gravity = { x: 0, y: 0.2 };
-export const wind = { x: 0, y: 0 };
+export const wind = { x: -0.01, y: 0 };

@@ -32,6 +32,7 @@ export default class Firework {
 		for (let i = this.particles.length - 1; i >= 0; i--) {
 			let p = this.particles[i];
 			p.applyForce(gravity);
+			p.applyForce(wind);
 			p.update();
 			if (p.lifespan < 0) {
 				this.particles.splice(i, 1);
