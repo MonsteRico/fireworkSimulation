@@ -1,5 +1,5 @@
 import Particle from "./particle";
-import { random, gravity, randomDecimal, randomUnitVector, randomVectorOnHeart, wind } from "./utils";
+import { random, gravity, randomDecimal, randomUnitVector, randomVectorOnHeart, wind, sleep } from "./utils";
 import { canvas } from "./index";
 import { ExplosionType } from "./types";
 
@@ -10,9 +10,9 @@ export default class Firework {
 	explosionType: ExplosionType;
 	constructor(color: string, x: number, y: number, type?: ExplosionType) {
 		if (x === undefined) {
-			this.rocket = new Particle(random(0, canvas.width), canvas.height, color, true);
+			this.rocket = new Particle(random(0, canvas.width), canvas.height, color, true, -1, -1);
 		} else {
-			this.rocket = new Particle(x, y, color, true);
+			this.rocket = new Particle(x, y, color, true, -1, -1);
 		}
 		this.explosionType = type || ExplosionType.Burst;
 		this.exploded = false;
@@ -30,7 +30,7 @@ export default class Firework {
 			}
 		}
 		for (let i = this.particles.length - 1; i >= 0; i--) {
-			let p = this.particles[i];
+			let p: Particle = this.particles[i];
 			p.applyForce(gravity);
 			p.applyForce(wind);
 			p.update();
@@ -41,7 +41,7 @@ export default class Firework {
 	};
 
 	done = function (): boolean {
-		return this.particles.length === 0 && this.exploded;
+		return this.exploded && this.particles.length === 0;
 	};
 
 	explode = function (type?: ExplosionType): void {
@@ -56,15 +56,57 @@ export default class Firework {
 			case ExplosionType.FilledInHeart:
 				this.explodeHeart(true);
 				break;
+			case ExplosionType.Star:
+				this.explodeStar();
+				break;
+			case ExplosionType.Fountain:
+				this.explodeFountain();
+				break;
+			case ExplosionType.Smile:
+				this.explodeSmile();
+				break;
+			case ExplosionType.Sparkle:
+				this.explodeSparkle();
+				break;
 			default:
 				this.explodeBurst();
 				break;
 		}
 	};
 
+	explodeStar = function (): void {};
+
+	explodeFountain = function (): void {
+		for (var i = 0; i < random(200, 300); i++) {
+			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color, false, 100, 100);
+			let force = randomUnitVector();
+			force.x *= random(-10, 10);
+			force.y *= random(-10, 10);
+			p.applyForce(force);
+			this.particles.push(p);
+		}
+	};
+
+	explodeSmile = function (): void {};
+
+	explodeSparkle = function (): void {
+		for (var i = 0; i < random(200, 400); i++) {
+			let lifespan = random(0, 100);
+			if (Math.random() < 0.5) {
+				lifespan = 0;
+			}
+			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color, false, 0, lifespan);
+			let force = randomUnitVector();
+			force.x *= random(-10, 10);
+			force.y *= random(-10, 10);
+			p.applyForce(force);
+			this.particles.push(p);
+		}
+	};
+
 	explodeBurst = function (): void {
 		for (var i = 0; i < random(300, 500); i++) {
-			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color);
+			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color, false, -1, -1);
 			let force = randomUnitVector();
 			force.x *= random(-10, 10);
 			force.y *= random(-10, 10);
@@ -81,7 +123,7 @@ export default class Firework {
 			heartSize = randomDecimal(0.1, 0.3);
 		}
 		for (var i = 0; i < random(300, 500); i++) {
-			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color);
+			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color, false, -1, -1);
 			let force;
 			if (!filled) {
 				// heart

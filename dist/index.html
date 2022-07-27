@@ -9,6 +9,7 @@
 			body {
 				overflow-x: hidden;
 				background-color: #0f0f1f;
+				user-select: none;
 			}
 		</style>
 	</head>
@@ -16,14 +17,40 @@
 		<canvas id="canvas" width="800" height="600"></canvas>
 		<div id="settings">
 			<p>
-				Click to shoot a <span id="clickColor" style="color: green">GREEN</span>
-				<span id="clickShape">STAR</span> firework!
+				Click to shoot a
+				<select id="colorDropdown">
+					<option>Red</option>
+					<option selected>Green</option>
+					<option>Blue</option>
+					<option>Yellow</option>
+					<option>Purple</option>
+					<option>Orange</option>
+					<option>White</option>
+					<option>Black</option>
+				</select>
+				<select id="typeDropdown">
+					<option selected>Burst</option>
+					<option>Heart</option>
+					<option>Filled Heart</option>
+					<option>Star</option>
+					<option>Fountain</option>
+					<option>Smile</option>
+					<option>Sparkle</option>
+				</select>
+				firework!
 			</p>
-			<p>Click any word in all caps to change settings!</p>
 			<div style="display: flex; flex-direction: row; justify-content: space-between">
-				<p>GRAVITY</p>
-				<p>WIND</p>
+				<div>
+					<p id="gravityLabel">Gravity: 0.2</p>
+					<input type="range" id="gravityRange" value="0.2" min="0.1" max="0.5" step="0.01" />
+				</div>
+				<div>
+					<p id="windLabel">Wind: -0.01</p>
+					<input type="range" id="windRange" value="-0.01" min="-0.1" max="0.1" step="0.01" />
+				</div>
 			</div>
+			<input style="margin-top: 2em; margin-bottom: 2em" type="checkbox" id="autoCheckbox" checked />
+			<label for="autoCheckbox">Automatically Shoot Fireworks</label>
 		</div>
 		<script src="./main.js"></script>
 	</body>

@@ -10,13 +10,18 @@ export default class Particle {
 	color: string;
 	rocket: boolean;
 	lifespan: number;
+	tailLength: number;
 	previousPostitions: { x: number; y: number }[] = [];
-	constructor(x: number, y: number, color: string, rocket?: boolean) {
+	constructor(x: number, y: number, color: string, rocket: boolean, tailLength: number, lifespan: number) {
 		this.x = x;
 		this.y = y;
 		this.vx = 0;
 		this.rocket = rocket;
-		this.lifespan = 255;
+		if (lifespan !== -1) {
+			this.lifespan = lifespan;
+		} else {
+			this.lifespan = 100;
+		}
 		if (rocket) {
 			this.vy = random(-15, -7);
 			this.size = 5;
@@ -27,6 +32,11 @@ export default class Particle {
 		this.ax = 0;
 		this.ay = 0;
 		this.color = color;
+		if (tailLength !== -1) {
+			this.tailLength = tailLength;
+		} else {
+			this.tailLength = random(3, 6);
+		}
 	}
 	applyForce(force: { x: number; y: number }): void {
 		this.ax += force.x;
@@ -37,10 +47,10 @@ export default class Particle {
 		if (!this.rocket) {
 			this.vy *= 0.95;
 			this.vx *= 0.95;
-			this.lifespan -= 3;
+			this.lifespan -= 1;
 		}
 		if (this.lifespan < 0) {
-			this.lifespan = 0;
+			this.lifespan = -1;
 		}
 		this.vx += this.ax;
 		this.vy += this.ay;
@@ -49,7 +59,7 @@ export default class Particle {
 		this.ax = 0;
 		this.ay = 0;
 		this.previousPostitions.push({ x: this.x, y: this.y });
-		if (this.previousPostitions.length > 6) {
+		if (this.previousPostitions.length > this.tailLength) {
 			this.previousPostitions.shift();
 		}
 	};
@@ -60,7 +70,7 @@ export default class Particle {
 		ctx.shadowOffsetX = 0;
 		ctx.shadowOffsetY = 0;
 		for (let i = 0; i < this.previousPostitions.length; i++) {
-			ctx.globalAlpha = ((i / this.previousPostitions.length) * this.lifespan) / 255;
+			ctx.globalAlpha = ((i / this.previousPostitions.length) * this.lifespan) / 100;
 			let p = this.previousPostitions[i];
 			ctx.beginPath();
 			ctx.fillStyle = this.color;
@@ -68,6 +78,7 @@ export default class Particle {
 			ctx.fill();
 			ctx.closePath();
 		}
+		ctx.globalAlpha = this.lifespan / 100;
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
 		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);

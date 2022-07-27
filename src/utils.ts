@@ -25,5 +25,13 @@ export function randomVectorOnHeart(size: number): { x: number; y: number } {
 	};
 }
 
+export function sleep(milliseconds: number) {
+	const date = Date.now();
+	let currentDate = null;
+	do {
+		currentDate = Date.now();
+	} while (currentDate - date < milliseconds);
+}
+
 export const gravity = { x: 0, y: 0.2 };
 export const wind = { x: -0.01, y: 0 };

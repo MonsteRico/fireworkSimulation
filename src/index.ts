@@ -19,9 +19,11 @@ var animFrame: number;
 var actualFps: number;
 import Firework from "./firework";
 import { ExplosionType } from "./types";
-import { random } from "./utils";
+import { gravity, random, wind } from "./utils";
 let fireworks: Firework[] = [];
 let skyColor: string;
+let clickColor: string = "#00ff00";
+let clickType: ExplosionType = ExplosionType.Burst;
 function setup() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -50,8 +52,6 @@ function setup() {
 }
 
 function gameLoop(): void {
-	animFrame = requestAnimationFrame(gameLoop);
-
 	//Calcuate the time that has elapsed since the last frame
 	var current = Date.now(),
 		elapsed = current - start;
@@ -59,7 +59,7 @@ function gameLoop(): void {
 	//Add the elapsed time to the lag counter
 	lag += elapsed;
 
-	processInput();
+	//	processInput();
 	//Update the frame if the lag counter is greater than or
 	//equal to the frame duration
 	while (lag >= frameDuration) {
@@ -74,16 +74,19 @@ function gameLoop(): void {
 	//Frame data output:
 	actualFps = Math.floor(1000 / elapsed);
 	if (debug) {
-		output.innerHTML = "ms: " + elapsed + " fps: " + actualFps;
+		output.innerHTML = "ms: " + elapsed + " actual fps: " + actualFps;
 		output.innerHTML += " lag: " + Math.floor(lag);
 	}
+	animFrame = requestAnimationFrame(gameLoop);
 }
 
 function processInput(): void {}
 
+let autoCheckbox = document.getElementById("autoCheckbox") as HTMLInputElement;
+
 //The game logic
 function update(): void {
-	if (Math.random() < 0.01) {
+	if (Math.random() < 0.01 && autoCheckbox.checked && fireworks.length < 10) {
 		// pick a random bright color
 		let fireworkColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
 		if (Math.random() < 0.5) {
@@ -120,16 +123,10 @@ function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
 }
 
 canvas.addEventListener("mousedown", function (e) {
-	let mousePos = getMousePosition(canvas, e);
-	fireworks.push(
-		new Firework(
-			`rgb(${Math.floor(255 * Math.random())},${Math.floor(255 * Math.random())},${Math.floor(
-				255 * Math.random()
-			)})`,
-			mousePos.x,
-			mousePos.y
-		)
-	);
+	if (fireworks.length < 10) {
+		let mousePos = getMousePosition(canvas, e);
+		fireworks.push(new Firework(clickColor, mousePos.x, mousePos.y, clickType));
+	}
 });
 
 const resize = () => {
@@ -138,3 +135,54 @@ const resize = () => {
 };
 
 window.addEventListener("resize", resize);
+
+// add an onchange to the colorDropdown to change the color of the fireworks
+const colorDropdown = document.getElementById("colorDropdown") as HTMLSelectElement;
+colorDropdown.onchange = function () {
+	clickColor = colorDropdown.value.toLowerCase();
+};
+
+// add an onchange to the typeDropdown to change the type of the fireworks
+const typeDropdown = document.getElementById("typeDropdown") as HTMLSelectElement;
+typeDropdown.onchange = function () {
+	switch (typeDropdown.value) {
+		case "Burst":
+			clickType = ExplosionType.Burst;
+			break;
+		case "Heart":
+			clickType = ExplosionType.Heart;
+			break;
+		case "Filled Heart":
+			clickType = ExplosionType.FilledInHeart;
+			break;
+		case "Star":
+			clickType = ExplosionType.Star;
+			break;
+		case "Fountain":
+			clickType = ExplosionType.Fountain;
+			break;
+		case "Sparkle":
+			clickType = ExplosionType.Sparkle;
+			break;
+		case "Smile":
+			clickType = ExplosionType.Smile;
+			break;
+		default:
+			clickType = ExplosionType.Burst;
+			break;
+	}
+};
+
+// add onclick to gravity range to change the gravity
+const gravityRange = document.getElementById("gravityRange") as HTMLInputElement;
+gravityRange.onchange = function () {
+	document.getElementById("gravityLabel").innerHTML = "Gravity: " + -1 * gravityRange.valueAsNumber;
+	gravity.y = gravityRange.valueAsNumber;
+};
+
+// add onclick to wind range to change the wind
+const windRange = document.getElementById("windRange") as HTMLInputElement;
+windRange.onchange = function () {
+	document.getElementById("windLabel").innerHTML = "Wind: " + windRange.valueAsNumber;
+	wind.x = windRange.valueAsNumber;
+};
