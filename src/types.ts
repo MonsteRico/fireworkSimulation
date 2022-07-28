@@ -15,8 +15,6 @@ export enum ExplosionType {
 	Burst = "burst",
 	Heart = "heart",
 	FilledInHeart = "filledInHeart",
-	Star = "star",
-	Smile = "smile",
 	Fountain = "fountain",
 	Sparkle = "sparkle",
 }

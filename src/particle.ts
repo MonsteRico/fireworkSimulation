@@ -75,15 +75,15 @@ export default class Particle {
 			ctx.beginPath();
 			ctx.fillStyle = this.color;
 			ctx.arc(p.x, p.y, this.size, 0, Math.PI * 2, false);
-			ctx.fill();
 			ctx.closePath();
+			ctx.fill();
 		}
 		ctx.globalAlpha = this.lifespan / 100;
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
 		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-		ctx.fill();
 		ctx.closePath();
+		ctx.fill();
 		ctx.globalAlpha = 1;
 	};
 }

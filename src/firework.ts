@@ -1,5 +1,5 @@
 import Particle from "./particle";
-import { random, gravity, randomDecimal, randomUnitVector, randomVectorOnHeart, wind, sleep } from "./utils";
+import { random, gravity, randomDecimal, randomUnitVector, randomVectorOnHeart, wind } from "./utils";
 import { canvas } from "./index";
 import { ExplosionType } from "./types";
 
@@ -56,14 +56,8 @@ export default class Firework {
 			case ExplosionType.FilledInHeart:
 				this.explodeHeart(true);
 				break;
-			case ExplosionType.Star:
-				this.explodeStar();
-				break;
 			case ExplosionType.Fountain:
 				this.explodeFountain();
-				break;
-			case ExplosionType.Smile:
-				this.explodeSmile();
 				break;
 			case ExplosionType.Sparkle:
 				this.explodeSparkle();
@@ -74,11 +68,9 @@ export default class Firework {
 		}
 	};
 
-	explodeStar = function (): void {};
-
 	explodeFountain = function (): void {
-		for (var i = 0; i < random(200, 300); i++) {
-			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color, false, 100, 100);
+		for (var i = 0; i < random(50, 100); i++) {
+			let p = new Particle(this.rocket.x, this.rocket.y, this.rocket.color, false, 50, 100);
 			let force = randomUnitVector();
 			force.x *= random(-10, 10);
 			force.y *= random(-10, 10);
@@ -86,8 +78,6 @@ export default class Firework {
 			this.particles.push(p);
 		}
 	};
-
-	explodeSmile = function (): void {};
 
 	explodeSparkle = function (): void {
 		for (var i = 0; i < random(200, 400); i++) {

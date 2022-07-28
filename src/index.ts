@@ -1,6 +1,6 @@
 // Based on https://youtu.be/CKeyIbT3vXI
 export const canvas: HTMLCanvasElement = document.getElementById("canvas") as HTMLCanvasElement;
-export const ctx: CanvasRenderingContext2D = canvas.getContext("2d");
+export const ctx: CanvasRenderingContext2D = canvas.getContext("2d", { alpha: false });
 //Create output text to display the frame rate
 const output: HTMLParagraphElement = document.createElement("p");
 document.body.appendChild(output);
@@ -80,8 +80,6 @@ function gameLoop(): void {
 	animFrame = requestAnimationFrame(gameLoop);
 }
 
-function processInput(): void {}
-
 let autoCheckbox = document.getElementById("autoCheckbox") as HTMLInputElement;
 
 //The game logic
@@ -89,11 +87,30 @@ function update(): void {
 	if (Math.random() < 0.01 && autoCheckbox.checked && fireworks.length < 10) {
 		// pick a random bright color
 		let fireworkColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-		if (Math.random() < 0.5) {
-			fireworks.push(new Firework(fireworkColor, random(0, canvas.width), canvas.height, ExplosionType.Burst));
-		} else {
-			fireworks.push(new Firework(fireworkColor, random(0, canvas.width), canvas.height, ExplosionType.Heart));
+		// pick a random type of firework from the enum
+		let fireworkNum = random(0, Object.keys(ExplosionType).length - 1);
+		let fireworkType: ExplosionType;
+		switch (fireworkNum) {
+			case 0:
+				fireworkType = ExplosionType.Burst;
+				break;
+			case 1:
+				fireworkType = ExplosionType.Sparkle;
+				break;
+			case 2:
+				fireworkType = ExplosionType.Heart;
+				break;
+			case 3:
+				fireworkType = ExplosionType.FilledInHeart;
+				break;
+			case 4:
+				fireworkType = ExplosionType.Fountain;
+				break;
+			default:
+				fireworkType = ExplosionType.Burst;
+				break;
 		}
+		fireworks.push(new Firework(fireworkColor, random(0, canvas.width), canvas.height, fireworkType));
 	}
 	for (let i = fireworks.length - 1; i >= 0; i--) {
 		fireworks[i].update();
@@ -125,7 +142,12 @@ function getMousePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
 canvas.addEventListener("mousedown", function (e) {
 	if (fireworks.length < 10) {
 		let mousePos = getMousePosition(canvas, e);
-		fireworks.push(new Firework(clickColor, mousePos.x, mousePos.y, clickType));
+		if (clickColor == "random") {
+			let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+			fireworks.push(new Firework(randomColor, mousePos.x, mousePos.y, clickType));
+		} else {
+			fireworks.push(new Firework(clickColor, mousePos.x, mousePos.y, clickType));
+		}
 	}
 });
 
@@ -155,17 +177,11 @@ typeDropdown.onchange = function () {
 		case "Filled Heart":
 			clickType = ExplosionType.FilledInHeart;
 			break;
-		case "Star":
-			clickType = ExplosionType.Star;
-			break;
 		case "Fountain":
 			clickType = ExplosionType.Fountain;
 			break;
 		case "Sparkle":
 			clickType = ExplosionType.Sparkle;
-			break;
-		case "Smile":
-			clickType = ExplosionType.Smile;
 			break;
 		default:
 			clickType = ExplosionType.Burst;
