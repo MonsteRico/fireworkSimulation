@@ -1,6 +1,5 @@
-import { createRoot } from "react-dom/client";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { GRAVITY } from "./constants";
 import { FireworkType, Particle } from "./types";
@@ -32,7 +31,7 @@ function FireworkRenderer({ firework, onExplode }: { firework: FireworkType; onE
 		}
 	}, [isLaunched, initialPosition]);
 
-	useFrame((state, delta) => {
+	useFrame((_state, delta) => {
 		if (isLaunched && !hasExploded) {
 			// Adjust the condition to launch higher
 			if (currentPosition.y < launchHeight.current + explosionHeightOffset) {

@@ -1,10 +1,6 @@
-import { createRoot } from "react-dom/client";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useThree } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import Stars from "./Stars";
-import { FireworkType } from "./types";
-import FireworkRenderer from "./Firework";
 import { randomRange } from "./utils";
 
 function FireworksSpawner({ spawnFireworkAt }: { spawnFireworkAt: (position: THREE.Vector3) => void }) {

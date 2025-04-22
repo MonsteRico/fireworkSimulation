@@ -1,11 +1,11 @@
 import { createRoot } from "react-dom/client";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import Stars from "./Stars";
 import { FireworkType } from "./types";
 import FireworkRenderer from "./Firework";
-import { colorWithVariation, randomRange } from "./utils";
+import { randomRange } from "./utils";
 import FireworksSpawner from "./FireworksSpawner";
 import { BallFirework, BlueFirework, GreenFirework, RedFirework, UserFirework } from "./fireworks";
 import "./index.css";

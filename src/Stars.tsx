@@ -1,9 +1,6 @@
-import { createRoot } from "react-dom/client";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { FireworkType } from "./types";
-import FireworkRenderer from "./Firework";
 interface StarsProps {
 	count: number;
 }
@@ -26,7 +23,7 @@ function Stars({ count }: StarsProps) {
 	const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
 	useFrame(() => {
-		if (cameraRef.current) {
+		if (cameraRef.current && starRef.current) {
 			starRef.current.position.x = cameraRef.current.position.x; // = camera.position.x;
 			starRef.current.position.y = cameraRef.current.position.y; // = camera.position.y;
 		}
